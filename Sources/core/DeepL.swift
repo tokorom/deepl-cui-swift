@@ -19,7 +19,7 @@ public final class DeepL {
     targetLang: String,
     completion: @escaping (Result<String, Error>) -> Void
   ) {
-    DispatchQueue.global().asyncAfter(deadline: .now() + 3) {
+    DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
       completion(
         .success("text=\(text), sourceLang=\(sourceLang ?? "nil"), targetLang=\(targetLang)")
       )

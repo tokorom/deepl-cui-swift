@@ -4,7 +4,7 @@ import Foundation
 
 struct Command: ParsableCommand {
   @Argument(help: "Text to be translated.")
-  var text: String
+  var text: String?
 
   @Option(name: .shortAndLong, help: "Language of the text to be translated.")
   var sourceLang: String?
@@ -17,6 +17,15 @@ struct Command: ParsableCommand {
 
     let group = DispatchGroup()
     group.enter()
+
+    let text: String
+
+    if let validText = self.text {
+      text = validText
+    } else {
+      let standardInput = FileHandle.standardInput
+      text = String(data: standardInput.availableData, encoding: .utf8) ?? ""
+    }
 
     deepL.translate(text: text, sourceLang: sourceLang, targetLang: targetLang) { result in
       print(result)
