@@ -20,32 +20,7 @@ public final class DeepL {
     targetLang: String,
     completion: @escaping (Result<String, Error>) -> Void
   ) {
-    var request = URLRequest(url: Self.translateAPIURL)
-    request.httpMethod = "POST"
-    request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-
-    let authKeyItem = URLQueryItem(name: "auth_key", value: authKey)
-    let textItem = URLQueryItem(name: "text", value: text)
-    let targetLangItem = URLQueryItem(name: "target_lang", value: targetLang)
-    let sourceLangItem: URLQueryItem?
-    if let sourceLang = sourceLang {
-      sourceLangItem = URLQueryItem(name: "source_lang", value: sourceLang)
-    } else {
-      sourceLangItem = nil
-    }
-
-    var comp = URLComponents()
-    comp.queryItems = [authKeyItem, textItem, targetLangItem, sourceLangItem].compactMap { $0 }
-
-    guard let queryItemsString = comp.string else {
-      fatalError("Invalid arguments.")
-    }
-
-    guard let postData = String(queryItemsString.suffix(1)).data(using: .utf8) else {
-      fatalError("Invalid post data.")
-    }
-
-    request.httpBody = postData
+    let request = makeRequest(text: text, sourceLang: sourceLang, targetLang: targetLang)
 
     let dataTask = URLSession.shared.dataTask(with: request) { data, response, error in
       if let error = error {
@@ -64,5 +39,53 @@ public final class DeepL {
       completion(.success(resultText))
     }
     dataTask.resume()
+  }
+
+  public func makeRequest(
+    text: String,
+    sourceLang: String?,
+    targetLang: String
+  ) -> URLRequest {
+    var request = URLRequest(url: Self.translateAPIURL)
+    request.httpMethod = "POST"
+    request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+
+    let postBodyString = makePostBodyString(
+      text: text,
+      sourceLang: sourceLang,
+      targetLang: targetLang
+    )
+    guard let postData = postBodyString.data(using: .utf8) else {
+      fatalError("Invalid post data.")
+    }
+
+    request.httpBody = postData
+
+    return request
+  }
+
+  public func makePostBodyString(
+    text: String,
+    sourceLang: String?,
+    targetLang: String
+  ) -> String {
+    let authKeyItem = URLQueryItem(name: "auth_key", value: authKey)
+    let textItem = URLQueryItem(name: "text", value: text)
+    let targetLangItem = URLQueryItem(name: "target_lang", value: targetLang)
+    let sourceLangItem: URLQueryItem?
+    if let sourceLang = sourceLang {
+      sourceLangItem = URLQueryItem(name: "source_lang", value: sourceLang)
+    } else {
+      sourceLangItem = nil
+    }
+
+    var comp = URLComponents()
+    comp.queryItems = [authKeyItem, textItem, targetLangItem, sourceLangItem].compactMap { $0 }
+
+    guard let queryItemsString = comp.string else {
+      fatalError("Invalid arguments.")
+    }
+
+    return String(queryItemsString.suffix(queryItemsString.count - 1))
   }
 }
