@@ -20,7 +20,9 @@ public final class DeepL {
     completion: @escaping (Result<String, Error>) -> Void
   ) {
     DispatchQueue.global().asyncAfter(deadline: .now() + 3) {
-      completion(.success(text))
+      completion(
+        .success("text=\(text), sourceLang=\(sourceLang ?? "nil"), targetLang=\(targetLang)")
+      )
     }
   }
 }

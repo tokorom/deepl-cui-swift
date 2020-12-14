@@ -1,19 +1,30 @@
-import Foundation
+import ArgumentParser
 import DeepLCore
+import Foundation
 
+struct Command: ParsableCommand {
+  @Argument(help: "Text to be translated.")
+  var text: String
 
-let text: String = "こんにちは"
-let sourceLang: String? = nil
-let targetLang: String = "EN-US"
+  @Option(name: .shortAndLong, help: "Language of the text to be translated.")
+  var sourceLang: String?
 
-let deepL = DeepL(authKey: "SAMPLE")
+  @Option(name: .shortAndLong, help: "The language into which the text should be translated.")
+  var targetLang: String = "EN-US"
 
-let group = DispatchGroup()
-group.enter()
+  mutating func run() throws {
+    let deepL = DeepL(authKey: "SAMPLE")
 
-deepL.translate(text: text, sourceLang: sourceLang, targetLang: targetLang) { result in
-  print(result)
-  group.leave()
+    let group = DispatchGroup()
+    group.enter()
+
+    deepL.translate(text: text, sourceLang: sourceLang, targetLang: targetLang) { result in
+      print(result)
+      group.leave()
+    }
+
+    group.wait()
+  }
 }
 
-group.wait()
+Command.main()
