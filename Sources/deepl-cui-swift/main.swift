@@ -3,13 +3,17 @@ import DeepLCore
 import Foundation
 
 struct Command: ParsableCommand {
-  @Argument(help: "Text to be translated.")
+  @Argument(help: "Text to be translated. If not specified, use STDIN.")
   var text: String?
 
-  @Option(name: .shortAndLong, help: "Language of the text to be translated.")
+  @Option(
+    name: .shortAndLong,
+    help:
+      "Language of the text to be translated. If this parameter is omitted, the API will attempt to detect the language of the text and translate it."
+  )
   var sourceLang: String?
 
-  @Option(name: .shortAndLong, help: "The language into which the text should be translated.")
+  @Option(name: .shortAndLong, help: "The language into which the text should be translated")
   var targetLang: String = "EN-US"
 
   mutating func run() throws {
