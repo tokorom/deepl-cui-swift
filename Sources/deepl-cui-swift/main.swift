@@ -1,1 +1,3 @@
-print("Hello, world!")
+import DeepLCore
+
+print(DeepL.sample)

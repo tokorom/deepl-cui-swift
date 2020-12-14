@@ -1,7 +1,7 @@
 import XCTest
 
-import deepl_cui_swiftTests
+import coreTests
 
 var tests = [XCTestCaseEntry]()
-tests += deepl_cui_swiftTests.allTests()
+tests += coreTests.allTests()
 XCTMain(tests)
