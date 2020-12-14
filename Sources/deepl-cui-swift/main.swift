@@ -1,3 +1,4 @@
 import DeepLCore
 
-print(DeepL.sample)
+let deepL = DeepL(authKey: "SAMPLE")
+print(deepL.authKey)

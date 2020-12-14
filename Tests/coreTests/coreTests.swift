@@ -4,11 +4,13 @@ import XCTest
 import class Foundation.Bundle
 
 final class coreTests: XCTestCase {
-  func testExample() throws {
-    XCTAssertEqual(DeepL.sample, "sample")
+  func testAuthKey() throws {
+    let deepL = DeepL(authKey: "SAMPLE")
+
+    XCTAssertEqual(deepL.authKey, "SAMPLE")
   }
 
   static var allTests = [
-    ("testExample", testExample)
+    ("testAuthKey", testAuthKey)
   ]
 }

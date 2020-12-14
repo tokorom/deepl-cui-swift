@@ -7,5 +7,17 @@
 import Foundation
 
 public final class DeepL {
-  public static let sample = "sample"
+  public let authKey: String
+
+  public init(authKey: String) {
+    self.authKey = authKey
+  }
+
+  public func translate(
+    text: String,
+    sourceLang: String? = nil,
+    targetLang: String,
+    completion: (Result<String, Error>) -> Void
+  ) {
+  }
 }
