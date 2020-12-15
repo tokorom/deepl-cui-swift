@@ -50,7 +50,11 @@ struct Command: ParsableCommand {
     let deepL = DeepL(authKey: authKey)
 
     deepL.translate(text: text, sourceLang: sourceLang, targetLang: targetLang) { result in
-      print(result)
+      let resultText = try? result.get()
+      if let data = resultText?.data(using: .utf8) {
+        let standardOutput = FileHandle.standardOutput
+        standardOutput.write(data)
+      }
       group.leave()
     }
 
