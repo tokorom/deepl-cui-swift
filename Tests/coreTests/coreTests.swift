@@ -21,7 +21,19 @@ final class coreTests: XCTestCase {
     XCTAssertEqual(postBodyString, "auth_key=AUTH_KEY&text=abc%22D&target_lang=DE&source_lang=JA")
   }
 
+  func testParseAPIResult() throws {
+    let deepL = DeepL(authKey: "AUTH_KEY")
+
+    let result =
+      "{\"translations\":[{\"detected_source_language\":\"JA\",\"text\":\"Good Morning\\n\"}]}"
+    let text = try deepL.parseAPIResult(result)
+
+    XCTAssertEqual(text, "Good Morning\n")
+  }
+
   static var allTests = [
-    ("testAuthKey", testAuthKey)
+    ("testAuthKey", testAuthKey),
+    ("testMakePostBodyString", testMakePostBodyString),
+    ("testParseAPIResult", testParseAPIResult),
   ]
 }

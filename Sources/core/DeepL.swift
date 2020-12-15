@@ -32,8 +32,16 @@ public final class DeepL {
         fatalError("API response is empty.")
       }
 
-      guard let resultText = String(data: data, encoding: .utf8) else {
+      guard let result = String(data: data, encoding: .utf8) else {
         fatalError("API response is invalid.")
+      }
+
+      let resultText: String
+      do {
+        resultText = try self.parseAPIResult(result)
+      } catch {
+        completion(.failure(error))
+        return
       }
 
       completion(.success(resultText))
@@ -87,5 +95,13 @@ public final class DeepL {
     }
 
     return String(queryItemsString.suffix(queryItemsString.count - 1))
+  }
+
+  public func parseAPIResult(_ result: String) throws -> String {
+    let decoder = JSONDecoder()
+    decoder.keyDecodingStrategy = .convertFromSnakeCase
+    let data = result.data(using: .utf8) ?? Data()
+    let translationResponse = try decoder.decode(TranslationResponse.self, from: data)
+    return translationResponse.resultText
   }
 }
