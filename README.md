@@ -23,3 +23,16 @@ OPTIONS:
   -h, --help              Show help information.
 ```
 
+## Simple USAGE
+
+### with arguments
+
+```
+deepl-cui-swift --auth-key YOUR_AUTH_KEY おはよう
+```
+
+### with STDIN and ENV
+
+```
+echo おはよう | DEEPL_AUTH_KEY=YOUR_AUTH_KEY deepl-cui-swift
+```
