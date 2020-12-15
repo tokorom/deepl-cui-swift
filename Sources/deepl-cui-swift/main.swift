@@ -18,6 +18,9 @@ struct Command: ParsableCommand {
   @Option(name: .shortAndLong, help: "The language into which the text should be translated")
   var targetLang: String = "EN-US"
 
+  @Flag(name: .shortAndLong, help: "Include pre-translated text in output results")
+  var withSource: Bool = false
+
   @Option(
     name: .long,
     help: "authKey for DeepL API. If not specified, use the environment variable DEEPL_AUTH_KEY."
@@ -48,10 +51,18 @@ struct Command: ParsableCommand {
     }
 
     let deepL = DeepL(authKey: authKey)
+    let withSource = self.withSource
 
     deepL.translate(text: text, sourceLang: sourceLang, targetLang: targetLang) { result in
-      let resultText = try? result.get()
-      if let data = resultText?.data(using: .utf8) {
+      let resultText = (try? result.get()) ?? ""
+      let outputText: String
+      if withSource {
+        outputText = text + resultText
+      } else {
+        outputText = resultText
+      }
+
+      if let data = outputText.data(using: .utf8) {
         let standardOutput = FileHandle.standardOutput
         standardOutput.write(data)
       }
