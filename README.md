@@ -23,6 +23,10 @@ OPTIONS:
   -h, --help              Show help information.
 ```
 
+## API Domain
+
+Version 1.0.0 or later uses api-free.deepl.com
+
 ## Simple USAGE
 
 ### with arguments
