@@ -7,7 +7,7 @@
 import Foundation
 
 public final class DeepL {
-  private static let translateAPIURL = URL(string: "https://api.deepl.com/v2/translate")!
+  private static let translateAPIURL = URL(string: "https://api-free.deepl.com/v2/translate")!
   public let authKey: String
 
   public init(authKey: String) {
